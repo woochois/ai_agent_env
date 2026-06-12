@@ -10,23 +10,23 @@ klid-aicb와 동일한 기술 스택(GraphQL + Relay + NestJS + PostGraphile + P
   - [x] 1.1 `db/init.sql` 생성 (테이블, 인덱스, CHECK 제약, 시드 데이터)
   - [x] 1.2 `docker-compose.yml` 업데이트 (postgres, graphql-server 서비스 추가)
 
-- [ ] 2. NestJS GraphQL 서버 초기 설정: `graphql-server/` 디렉토리에 NestJS 프로젝트 생성, PostGraphile 연동, 기본 모듈 구성, Dockerfile [Requirement 13]
-  - [-] 2.1 NestJS 프로젝트 생성 (main.ts, app.module.ts, package.json, tsconfig.json)
-  - [ ] 2.2 PostGraphile 모듈 (postgraphile.module.ts, postgraphile.service.ts) - DB 연결 + GraphQL 스키마 자동 생성
-  - [ ] 2.3 Dockerfile 생성
+- [x] 2. NestJS GraphQL 서버 초기 설정: `graphql-server/` 디렉토리에 NestJS 프로젝트 생성, PostGraphile 연동, 기본 모듈 구성, Dockerfile [Requirement 13]
+  - [x] 2.1 NestJS 프로젝트 생성 (main.ts, app.module.ts, package.json, tsconfig.json)
+  - [x] 2.2 PostGraphile 모듈 (postgraphile.module.ts, postgraphile.service.ts) - DB 연결 + GraphQL 스키마 자동 생성
+  - [x] 2.3 Dockerfile 생성
 
-- [ ] 3. JWT 인증 구현 (NestJS): Auth 모듈(login, refresh, logout 엔드포인트), bcrypt 비밀번호 검증, JWT sign/verify, Auth middleware (GraphQL 요청에서 Bearer token 검증 → userId 컨텍스트 주입) [Requirement 20]
-  - [ ] 3.1 auth.module.ts, auth.controller.ts (POST /auth/login, /auth/refresh)
-  - [ ] 3.2 auth.service.ts (JWT 생성/검증, bcrypt verify)
-  - [ ] 3.3 Auth Guard/Middleware (GraphQL 요청 Bearer token 검증)
+- [x] 3. JWT 인증 구현 (NestJS): Auth 모듈(login, refresh, logout 엔드포인트), bcrypt 비밀번호 검증, JWT sign/verify, Auth middleware (GraphQL 요청에서 Bearer token 검증 → userId 컨텍스트 주입) [Requirement 20]
+  - [x] 3.1 auth.module.ts, auth.controller.ts (POST /auth/login, /auth/refresh)
+  - [x] 3.2 auth.service.ts (JWT 생성/검증, bcrypt verify)
+  - [x] 3.3 Auth Guard/Middleware (GraphQL 요청 Bearer token 검증)
 
-- [ ] 4. sendChat 커스텀 뮤테이션 (NestJS): PostGraphile 플러그인으로 sendChat mutation 구현 - 챗봇 설정 로드 → user 메시지 저장 → FastAPI Supervisor 호출 → bot 메시지 저장 → 결과 반환 [Requirement 6, 7, 16, 17]
-  - [ ] 4.1 `plugins/chat-plugin.ts` 구현 (PostGraphile makeExtendSchemaPlugin)
-  - [ ] 4.2 Supervisor API 호출 로직 (system_prompt + guardrails 조합, tool_agents 포함)
-  - [ ] 4.3 메시지 저장 및 소요시간 측정
+- [x] 4. sendChat 커스텀 뮤테이션 (NestJS): PostGraphile 플러그인으로 sendChat mutation 구현 - 챗봇 설정 로드 → user 메시지 저장 → FastAPI Supervisor 호출 → bot 메시지 저장 → 결과 반환 [Requirement 6, 7, 16, 17]
+  - [x] 4.1 `plugins/chat-plugin.ts` 구현 (PostGraphile makeExtendSchemaPlugin)
+  - [x] 4.2 Supervisor API 호출 로직 (system_prompt + guardrails 조합, tool_agents 포함)
+  - [x] 4.3 메시지 저장 및 소요시간 측정
 
 - [ ] 5. React 프론트엔드 프로젝트 초기 설정: `frontend/` 디렉토리에 Vite + React + TypeScript + Tailwind + shadcn/ui + Relay 설정, relay.config.json, schema.graphql, vite-plugin-relay [Requirement 13]
-  - [ ] 5.1 Vite 프로젝트 생성 + 핵심 의존성 설치 (react-relay, relay-runtime, relay-compiler, vite-plugin-relay, tailwindcss, shadcn/ui, lucide-react, sonner, react-markdown)
+  - [-] 5.1 Vite 프로젝트 생성 + 핵심 의존성 설치 (react-relay, relay-runtime, relay-compiler, vite-plugin-relay, tailwindcss, shadcn/ui, lucide-react, sonner, react-markdown)
   - [ ] 5.2 relay.config.json, schema.graphql (PostGraphile 서버에서 추출), vite.config.ts (proxy + relay plugin)
   - [ ] 5.3 Tailwind CSS + CSS 변수 테마 설정, components.json, src/lib/utils.ts
 
