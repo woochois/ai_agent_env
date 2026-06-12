@@ -1,0 +1,846 @@
+"""
+PostGraphile auto-generated GraphQL schema from PostgreSQL tables.
+Used by relay-compiler at build time for type generation.
+"""
+
+# === Relay Node Interface ===
+
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: Cursor
+  endCursor: Cursor
+}
+
+scalar Cursor
+scalar Datetime
+
+# === Query Root ===
+
+type Query {
+  """Fetches an object given its globally unique ID."""
+  node(id: ID!): Node
+
+  """The root query type for all queries."""
+  query: Query!
+
+  # --- Users ---
+  allUsers(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: UserFilter
+  ): UsersConnection
+
+  userByUserId(userId: Int!): User
+  userByUserEmail(userEmail: String!): User
+
+  # --- Models ---
+  allModels(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ModelsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ModelFilter
+  ): ModelsConnection
+
+  modelByModelId(modelId: Int!): Model
+
+  # --- Chatbots ---
+  allChatbots(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotFilter
+  ): ChatbotsConnection
+
+  chatbotByChatbotId(chatbotId: Int!): Chatbot
+
+  # --- Chatbot Sessions ---
+  allChatbotSessions(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotSessionsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotSessionFilter
+  ): ChatbotSessionsConnection
+
+  chatbotSessionBySessionId(sessionId: String!): ChatbotSession
+
+  # --- Chatbot Messages ---
+  allChatbotMessages(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotMessagesOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotMessageFilter
+  ): ChatbotMessagesConnection
+
+  chatbotMessageByMessageId(messageId: Int!): ChatbotMessage
+
+  # --- Guard Rulesets ---
+  allGuardRulesets(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [GuardRulesetsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: GuardRulesetFilter
+  ): GuardRulesetsConnection
+
+  guardRulesetByGuardRulesetId(guardRulesetId: Int!): GuardRuleset
+
+  # --- Chatbot Tool Agents ---
+  allChatbotToolAgents(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotToolAgentsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotToolAgentFilter
+  ): ChatbotToolAgentsConnection
+
+  chatbotToolAgentById(id: Int!): ChatbotToolAgent
+}
+
+# === Types ===
+
+type User implements Node {
+  id: ID!
+  userId: Int!
+  userName: String!
+  userEmail: String!
+  userPassword: String!
+  isAdmin: Boolean!
+  createdAt: Datetime
+  isDeleted: Boolean!
+
+  """Reads and enables pagination through a set of Chatbot."""
+  chatbotsByUserId(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotFilter
+  ): ChatbotsConnection!
+
+  """Reads and enables pagination through a set of ChatbotSession."""
+  chatbotSessionsByUserId(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotSessionsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotSessionFilter
+  ): ChatbotSessionsConnection!
+}
+
+type Model implements Node {
+  id: ID!
+  modelId: Int!
+  modelName: String!
+  provider: String!
+  isActive: Boolean!
+
+  """Reads and enables pagination through a set of Chatbot."""
+  chatbotsByModelId(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotFilter
+  ): ChatbotsConnection!
+}
+
+type Chatbot implements Node {
+  id: ID!
+  chatbotId: Int!
+  chatbotTitle: String!
+  description: String
+  chatbotVisibility: Boolean!
+  chatbotPluginKey: String
+  modelId: Int
+  chatbotPrompt: String
+  userId: Int!
+  updateVersion: Int!
+  isDeleted: Boolean!
+  createdAt: Datetime
+
+  """Reads a single Model that is related to this Chatbot."""
+  modelByModelId: Model
+
+  """Reads a single User that is related to this Chatbot."""
+  userByUserId: User
+
+  """Reads and enables pagination through a set of ChatbotSession."""
+  chatbotSessionsByChatbotId(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotSessionsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotSessionFilter
+  ): ChatbotSessionsConnection!
+
+  """Reads and enables pagination through a set of GuardRuleset."""
+  guardRulesetsByChatbotId(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [GuardRulesetsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: GuardRulesetFilter
+  ): GuardRulesetsConnection!
+
+  """Reads and enables pagination through a set of ChatbotToolAgent."""
+  chatbotToolAgentsByChatbotId(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotToolAgentsOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotToolAgentFilter
+  ): ChatbotToolAgentsConnection!
+}
+
+type ChatbotSession implements Node {
+  id: ID!
+  sessionId: String!
+  title: String!
+  userId: Int!
+  chatbotId: Int!
+  updateVersion: Int!
+  isDeleted: Boolean!
+  createdAt: Datetime
+
+  """Reads a single Chatbot that is related to this ChatbotSession."""
+  chatbotByChatbotId: Chatbot
+
+  """Reads a single User that is related to this ChatbotSession."""
+  userByUserId: User
+
+  """Reads and enables pagination through a set of ChatbotMessage."""
+  chatbotMessagesBySessionId(
+    first: Int
+    last: Int
+    offset: Int
+    before: Cursor
+    after: Cursor
+    orderBy: [ChatbotMessagesOrderBy!] = [PRIMARY_KEY_ASC]
+    filter: ChatbotMessageFilter
+  ): ChatbotMessagesConnection!
+}
+
+type ChatbotMessage implements Node {
+  id: ID!
+  messageId: Int!
+  sessionId: String!
+  role: String!
+  content: String!
+  toolCalls: [String]
+  sources: [String]
+  elapsedMs: Float
+  createdAt: Datetime
+
+  """Reads a single ChatbotSession that is related to this ChatbotMessage."""
+  chatbotSessionBySessionId: ChatbotSession
+}
+
+type GuardRuleset implements Node {
+  id: ID!
+  guardRulesetId: Int!
+  chatbotId: Int!
+  rule: String!
+  orderIndex: Int!
+
+  """Reads a single Chatbot that is related to this GuardRuleset."""
+  chatbotByChatbotId: Chatbot
+}
+
+type ChatbotToolAgent implements Node {
+  id: ID!
+  chatbotToolAgentId: Int!
+  chatbotId: Int!
+  toolAgentKey: String!
+  isEnabled: Boolean!
+
+  """Reads a single Chatbot that is related to this ChatbotToolAgent."""
+  chatbotByChatbotId: Chatbot
+}
+
+# === Connections (Relay cursor-based pagination) ===
+
+type UsersConnection {
+  nodes: [User!]!
+  edges: [UsersEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type UsersEdge {
+  cursor: Cursor!
+  node: User!
+}
+
+type ModelsConnection {
+  nodes: [Model!]!
+  edges: [ModelsEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ModelsEdge {
+  cursor: Cursor!
+  node: Model!
+}
+
+type ChatbotsConnection {
+  nodes: [Chatbot!]!
+  edges: [ChatbotsEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ChatbotsEdge {
+  cursor: Cursor!
+  node: Chatbot!
+}
+
+type ChatbotSessionsConnection {
+  nodes: [ChatbotSession!]!
+  edges: [ChatbotSessionsEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ChatbotSessionsEdge {
+  cursor: Cursor!
+  node: ChatbotSession!
+}
+
+type ChatbotMessagesConnection {
+  nodes: [ChatbotMessage!]!
+  edges: [ChatbotMessagesEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ChatbotMessagesEdge {
+  cursor: Cursor!
+  node: ChatbotMessage!
+}
+
+type GuardRulesetsConnection {
+  nodes: [GuardRuleset!]!
+  edges: [GuardRulesetsEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type GuardRulesetsEdge {
+  cursor: Cursor!
+  node: GuardRuleset!
+}
+
+type ChatbotToolAgentsConnection {
+  nodes: [ChatbotToolAgent!]!
+  edges: [ChatbotToolAgentsEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ChatbotToolAgentsEdge {
+  cursor: Cursor!
+  node: ChatbotToolAgent!
+}
+
+# === Ordering Enums ===
+
+enum UsersOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  USER_NAME_ASC
+  USER_NAME_DESC
+  USER_EMAIL_ASC
+  USER_EMAIL_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+}
+
+enum ModelsOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  MODEL_ID_ASC
+  MODEL_ID_DESC
+  MODEL_NAME_ASC
+  MODEL_NAME_DESC
+  PROVIDER_ASC
+  PROVIDER_DESC
+}
+
+enum ChatbotsOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  CHATBOT_ID_ASC
+  CHATBOT_ID_DESC
+  CHATBOT_TITLE_ASC
+  CHATBOT_TITLE_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+  MODEL_ID_ASC
+  MODEL_ID_DESC
+}
+
+enum ChatbotSessionsOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  SESSION_ID_ASC
+  SESSION_ID_DESC
+  TITLE_ASC
+  TITLE_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+  CHATBOT_ID_ASC
+  CHATBOT_ID_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+}
+
+enum ChatbotMessagesOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  MESSAGE_ID_ASC
+  MESSAGE_ID_DESC
+  SESSION_ID_ASC
+  SESSION_ID_DESC
+  ROLE_ASC
+  ROLE_DESC
+  CREATED_AT_ASC
+  CREATED_AT_DESC
+}
+
+enum GuardRulesetsOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  GUARD_RULESET_ID_ASC
+  GUARD_RULESET_ID_DESC
+  CHATBOT_ID_ASC
+  CHATBOT_ID_DESC
+  ORDER_INDEX_ASC
+  ORDER_INDEX_DESC
+}
+
+enum ChatbotToolAgentsOrderBy {
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  ID_ASC
+  ID_DESC
+  CHATBOT_ID_ASC
+  CHATBOT_ID_DESC
+  TOOL_AGENT_KEY_ASC
+  TOOL_AGENT_KEY_DESC
+}
+
+# === Filter Inputs ===
+
+input IntFilter {
+  isNull: Boolean
+  equalTo: Int
+  notEqualTo: Int
+  greaterThan: Int
+  greaterThanOrEqualTo: Int
+  lessThan: Int
+  lessThanOrEqualTo: Int
+  in: [Int!]
+  notIn: [Int!]
+}
+
+input StringFilter {
+  isNull: Boolean
+  equalTo: String
+  notEqualTo: String
+  in: [String!]
+  notIn: [String!]
+  includes: String
+  startsWith: String
+  endsWith: String
+  like: String
+  likeInsensitive: String
+}
+
+input BooleanFilter {
+  isNull: Boolean
+  equalTo: Boolean
+  notEqualTo: Boolean
+}
+
+input DatetimeFilter {
+  isNull: Boolean
+  equalTo: Datetime
+  notEqualTo: Datetime
+  greaterThan: Datetime
+  greaterThanOrEqualTo: Datetime
+  lessThan: Datetime
+  lessThanOrEqualTo: Datetime
+}
+
+input FloatFilter {
+  isNull: Boolean
+  equalTo: Float
+  notEqualTo: Float
+  greaterThan: Float
+  greaterThanOrEqualTo: Float
+  lessThan: Float
+  lessThanOrEqualTo: Float
+}
+
+input UserFilter {
+  userId: IntFilter
+  userName: StringFilter
+  userEmail: StringFilter
+  isAdmin: BooleanFilter
+  isDeleted: BooleanFilter
+  createdAt: DatetimeFilter
+  and: [UserFilter!]
+  or: [UserFilter!]
+  not: UserFilter
+}
+
+input ModelFilter {
+  modelId: IntFilter
+  modelName: StringFilter
+  provider: StringFilter
+  isActive: BooleanFilter
+  and: [ModelFilter!]
+  or: [ModelFilter!]
+  not: ModelFilter
+}
+
+input ChatbotFilter {
+  chatbotId: IntFilter
+  chatbotTitle: StringFilter
+  description: StringFilter
+  chatbotVisibility: BooleanFilter
+  modelId: IntFilter
+  userId: IntFilter
+  isDeleted: BooleanFilter
+  createdAt: DatetimeFilter
+  and: [ChatbotFilter!]
+  or: [ChatbotFilter!]
+  not: ChatbotFilter
+}
+
+input ChatbotSessionFilter {
+  sessionId: StringFilter
+  title: StringFilter
+  userId: IntFilter
+  chatbotId: IntFilter
+  isDeleted: BooleanFilter
+  createdAt: DatetimeFilter
+  and: [ChatbotSessionFilter!]
+  or: [ChatbotSessionFilter!]
+  not: ChatbotSessionFilter
+}
+
+input ChatbotMessageFilter {
+  messageId: IntFilter
+  sessionId: StringFilter
+  role: StringFilter
+  content: StringFilter
+  elapsedMs: FloatFilter
+  createdAt: DatetimeFilter
+  and: [ChatbotMessageFilter!]
+  or: [ChatbotMessageFilter!]
+  not: ChatbotMessageFilter
+}
+
+input GuardRulesetFilter {
+  guardRulesetId: IntFilter
+  chatbotId: IntFilter
+  rule: StringFilter
+  orderIndex: IntFilter
+  and: [GuardRulesetFilter!]
+  or: [GuardRulesetFilter!]
+  not: GuardRulesetFilter
+}
+
+input ChatbotToolAgentFilter {
+  id: IntFilter
+  chatbotId: IntFilter
+  toolAgentKey: StringFilter
+  isEnabled: BooleanFilter
+  and: [ChatbotToolAgentFilter!]
+  or: [ChatbotToolAgentFilter!]
+  not: ChatbotToolAgentFilter
+}
+
+# === Mutations ===
+
+type Mutation {
+  # --- Chatbot CRUD ---
+  createChatbot(input: CreateChatbotInput!): CreateChatbotPayload
+  updateChatbotByChatbotId(input: UpdateChatbotByChatbotIdInput!): UpdateChatbotPayload
+  deleteChatbotByChatbotId(input: DeleteChatbotByChatbotIdInput!): DeleteChatbotPayload
+
+  # --- ChatbotSession CRUD ---
+  createChatbotSession(input: CreateChatbotSessionInput!): CreateChatbotSessionPayload
+  deleteChatbotSessionBySessionId(input: DeleteChatbotSessionBySessionIdInput!): DeleteChatbotSessionPayload
+
+  # --- GuardRuleset CRUD ---
+  createGuardRuleset(input: CreateGuardRulesetInput!): CreateGuardRulesetPayload
+  updateGuardRulesetByGuardRulesetId(input: UpdateGuardRulesetByGuardRulesetIdInput!): UpdateGuardRulesetPayload
+  deleteGuardRulesetByGuardRulesetId(input: DeleteGuardRulesetByGuardRulesetIdInput!): DeleteGuardRulesetPayload
+
+  # --- ChatbotToolAgent CRUD ---
+  updateChatbotToolAgentById(input: UpdateChatbotToolAgentByIdInput!): UpdateChatbotToolAgentPayload
+  createChatbotToolAgent(input: CreateChatbotToolAgentInput!): CreateChatbotToolAgentPayload
+  deleteChatbotToolAgentById(input: DeleteChatbotToolAgentByIdInput!): DeleteChatbotToolAgentPayload
+
+  # --- Custom: Chat ---
+  sendChat(input: SendChatInput!): SendChatPayload
+}
+
+# === Chatbot Mutation Inputs/Payloads ===
+
+input CreateChatbotInput {
+  clientMutationId: String
+  chatbot: ChatbotInput!
+}
+
+input ChatbotInput {
+  chatbotTitle: String!
+  description: String
+  chatbotVisibility: Boolean
+  chatbotPluginKey: String
+  modelId: Int
+  chatbotPrompt: String
+  userId: Int!
+}
+
+type CreateChatbotPayload {
+  clientMutationId: String
+  chatbot: Chatbot
+  query: Query
+  chatbotsEdge(orderBy: [ChatbotsOrderBy!] = [PRIMARY_KEY_ASC]): ChatbotsEdge
+}
+
+input UpdateChatbotByChatbotIdInput {
+  clientMutationId: String
+  chatbotId: Int!
+  chatbotPatch: ChatbotPatch!
+}
+
+input ChatbotPatch {
+  chatbotTitle: String
+  description: String
+  chatbotVisibility: Boolean
+  chatbotPluginKey: String
+  modelId: Int
+  chatbotPrompt: String
+}
+
+type UpdateChatbotPayload {
+  clientMutationId: String
+  chatbot: Chatbot
+  query: Query
+  chatbotsEdge(orderBy: [ChatbotsOrderBy!] = [PRIMARY_KEY_ASC]): ChatbotsEdge
+}
+
+input DeleteChatbotByChatbotIdInput {
+  clientMutationId: String
+  chatbotId: Int!
+}
+
+type DeleteChatbotPayload {
+  clientMutationId: String
+  chatbot: Chatbot
+  deletedChatbotId: ID
+  query: Query
+  chatbotsEdge(orderBy: [ChatbotsOrderBy!] = [PRIMARY_KEY_ASC]): ChatbotsEdge
+}
+
+# === ChatbotSession Mutation Inputs/Payloads ===
+
+input CreateChatbotSessionInput {
+  clientMutationId: String
+  chatbotSession: ChatbotSessionInput!
+}
+
+input ChatbotSessionInput {
+  sessionId: String
+  title: String
+  userId: Int!
+  chatbotId: Int!
+}
+
+type CreateChatbotSessionPayload {
+  clientMutationId: String
+  chatbotSession: ChatbotSession
+  query: Query
+  chatbotSessionsEdge(orderBy: [ChatbotSessionsOrderBy!] = [PRIMARY_KEY_ASC]): ChatbotSessionsEdge
+}
+
+input DeleteChatbotSessionBySessionIdInput {
+  clientMutationId: String
+  sessionId: String!
+}
+
+type DeleteChatbotSessionPayload {
+  clientMutationId: String
+  chatbotSession: ChatbotSession
+  deletedChatbotSessionId: ID
+  query: Query
+  chatbotSessionsEdge(orderBy: [ChatbotSessionsOrderBy!] = [PRIMARY_KEY_ASC]): ChatbotSessionsEdge
+}
+
+# === GuardRuleset Mutation Inputs/Payloads ===
+
+input CreateGuardRulesetInput {
+  clientMutationId: String
+  guardRuleset: GuardRulesetInput!
+}
+
+input GuardRulesetInput {
+  chatbotId: Int!
+  rule: String!
+  orderIndex: Int!
+}
+
+type CreateGuardRulesetPayload {
+  clientMutationId: String
+  guardRuleset: GuardRuleset
+  query: Query
+  guardRulesetsEdge(orderBy: [GuardRulesetsOrderBy!] = [PRIMARY_KEY_ASC]): GuardRulesetsEdge
+}
+
+input UpdateGuardRulesetByGuardRulesetIdInput {
+  clientMutationId: String
+  guardRulesetId: Int!
+  guardRulesetPatch: GuardRulesetPatch!
+}
+
+input GuardRulesetPatch {
+  rule: String
+  orderIndex: Int
+}
+
+type UpdateGuardRulesetPayload {
+  clientMutationId: String
+  guardRuleset: GuardRuleset
+  query: Query
+  guardRulesetsEdge(orderBy: [GuardRulesetsOrderBy!] = [PRIMARY_KEY_ASC]): GuardRulesetsEdge
+}
+
+input DeleteGuardRulesetByGuardRulesetIdInput {
+  clientMutationId: String
+  guardRulesetId: Int!
+}
+
+type DeleteGuardRulesetPayload {
+  clientMutationId: String
+  guardRuleset: GuardRuleset
+  deletedGuardRulesetId: ID
+  query: Query
+  guardRulesetsEdge(orderBy: [GuardRulesetsOrderBy!] = [PRIMARY_KEY_ASC]): GuardRulesetsEdge
+}
+
+# === ChatbotToolAgent Mutation Inputs/Payloads ===
+
+input CreateChatbotToolAgentInput {
+  clientMutationId: String
+  chatbotToolAgent: ChatbotToolAgentInput!
+}
+
+input ChatbotToolAgentInput {
+  chatbotId: Int!
+  toolAgentKey: String!
+  isEnabled: Boolean
+}
+
+type CreateChatbotToolAgentPayload {
+  clientMutationId: String
+  chatbotToolAgent: ChatbotToolAgent
+  query: Query
+  chatbotToolAgentsEdge(orderBy: [ChatbotToolAgentsOrderBy!] = [PRIMARY_KEY_ASC]): ChatbotToolAgentsEdge
+}
+
+input UpdateChatbotToolAgentByIdInput {
+  clientMutationId: String
+  id: Int!
+  chatbotToolAgentPatch: ChatbotToolAgentPatch!
+}
+
+input ChatbotToolAgentPatch {
+  toolAgentKey: String
+  isEnabled: Boolean
+}
+
+type UpdateChatbotToolAgentPayload {
+  clientMutationId: String
+  chatbotToolAgent: ChatbotToolAgent
+  query: Query
+  chatbotToolAgentsEdge(orderBy: [ChatbotToolAgentsOrderBy!] = [PRIMARY_KEY_ASC]): ChatbotToolAgentsEdge
+}
+
+input DeleteChatbotToolAgentByIdInput {
+  clientMutationId: String
+  id: Int!
+}
+
+type DeleteChatbotToolAgentPayload {
+  clientMutationId: String
+  chatbotToolAgent: ChatbotToolAgent
+  deletedChatbotToolAgentId: ID
+  query: Query
+  chatbotToolAgentsEdge(orderBy: [ChatbotToolAgentsOrderBy!] = [PRIMARY_KEY_ASC]): ChatbotToolAgentsEdge
+}
+
+# === Custom SendChat Mutation ===
+
+input SendChatInput {
+  chatbotId: Int!
+  sessionId: String!
+  message: String!
+}
+
+type SendChatPayload {
+  userMessage: ChatbotMessage!
+  botMessage: ChatbotMessage!
+}

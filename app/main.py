@@ -166,6 +166,20 @@ def create_app() -> FastAPI:
             html_path = static_dir / "index.html"
             return HTMLResponse(content=html_path.read_text(encoding="utf-8"))
 
+    # Frontend SPA (React + Vite build)
+    frontend_dist = Path(__file__).parent.parent / "frontend" / "dist"
+    if frontend_dist.exists():
+        app.mount("/assets", StaticFiles(directory=str(frontend_dist / "assets")), name="frontend-assets")
+
+        # SPA fallback: serve index.html for all non-API routes
+        @app.get("/{path:path}", response_class=HTMLResponse, tags=["ui"])
+        async def serve_spa(path: str) -> HTMLResponse:
+            """Serve React SPA for all non-API routes."""
+            index_path = frontend_dist / "index.html"
+            if index_path.exists():
+                return HTMLResponse(content=index_path.read_text(encoding="utf-8"))
+            return HTMLResponse(content="<h1>Frontend not built</h1>", status_code=404)
+
     return app
 
 

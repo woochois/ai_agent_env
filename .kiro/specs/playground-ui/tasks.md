@@ -25,58 +25,58 @@ klid-aicb와 동일한 기술 스택(GraphQL + Relay + NestJS + PostGraphile + P
   - [x] 4.2 Supervisor API 호출 로직 (system_prompt + guardrails 조합, tool_agents 포함)
   - [x] 4.3 메시지 저장 및 소요시간 측정
 
-- [ ] 5. React 프론트엔드 프로젝트 초기 설정: `frontend/` 디렉토리에 Vite + React + TypeScript + Tailwind + shadcn/ui + Relay 설정, relay.config.json, schema.graphql, vite-plugin-relay [Requirement 13]
-  - [-] 5.1 Vite 프로젝트 생성 + 핵심 의존성 설치 (react-relay, relay-runtime, relay-compiler, vite-plugin-relay, tailwindcss, shadcn/ui, lucide-react, sonner, react-markdown)
-  - [ ] 5.2 relay.config.json, schema.graphql (PostGraphile 서버에서 추출), vite.config.ts (proxy + relay plugin)
-  - [ ] 5.3 Tailwind CSS + CSS 변수 테마 설정, components.json, src/lib/utils.ts
+- [x] 5. React 프론트엔드 프로젝트 초기 설정: `frontend/` 디렉토리에 Vite + React + TypeScript + Tailwind + shadcn/ui + Relay 설정, relay.config.json, schema.graphql, vite-plugin-relay [Requirement 13]
+  - [x] 5.1 Vite 프로젝트 생성 + 핵심 의존성 설치 (react-relay, relay-runtime, relay-compiler, vite-plugin-relay, tailwindcss, shadcn/ui, lucide-react, sonner, react-markdown)
+  - [x] 5.2 relay.config.json, schema.graphql (PostGraphile 서버에서 추출), vite.config.ts (proxy + relay plugin)
+  - [x] 5.3 Tailwind CSS + CSS 변수 테마 설정, components.json, src/lib/utils.ts
 
-- [ ] 6. Relay Environment 및 인증 계층: relayEnvironment.ts(GraphQL fetch + Bearer token + 401 자동 refresh), AuthProvider(login/logout/token 관리), ProtectedRoute [Requirement 13, 20]
-  - [ ] 6.1 `src/api/relayEnvironment.ts` (Relay Network layer with JWT)
-  - [ ] 6.2 `src/components/auth-provider.tsx` (AuthContext, login/logout, localStorage token)
-  - [ ] 6.3 `src/features/auth/pages/login-page.tsx` (로그인 폼 + 에러 표시)
+- [x] 6. Relay Environment 및 인증 계층: relayEnvironment.ts(GraphQL fetch + Bearer token + 401 자동 refresh), AuthProvider(login/logout/token 관리), ProtectedRoute [Requirement 13, 20]
+  - [x] 6.1 `src/api/relayEnvironment.ts` (Relay Network layer with JWT)
+  - [x] 6.2 `src/components/auth-provider.tsx` (AuthContext, login/logout, localStorage token)
+  - [x] 6.3 `src/features/auth/pages/login-page.tsx` (로그인 폼 + 에러 표시)
 
-- [ ] 7. 공통 컴포넌트: ThemeProvider, ModernNav(256px, 메뉴, 헬스뱃지, 로그아웃, 테마토글), PageLayout, ChatMarkdown, TypingIndicator [Requirement 1, 4, 7, 9, 11, 20]
-  - [ ] 7.1 `src/components/theme-provider.tsx` (다크/라이트, localStorage)
-  - [ ] 7.2 `src/components/modern-nav.tsx` (메뉴 항목, 헬스뱃지, 사용자 아바타, 로그아웃 버튼)
-  - [ ] 7.3 `src/components/page-layout.tsx`
-  - [ ] 7.4 `src/components/chat-markdown.tsx` (react-markdown + rehype-raw + remark-gfm)
-  - [ ] 7.5 `src/components/typing-indicator.tsx`
+- [x] 7. 공통 컴포넌트: ThemeProvider, ModernNav(256px, 메뉴, 헬스뱃지, 로그아웃, 테마토글), PageLayout, ChatMarkdown, TypingIndicator [Requirement 1, 4, 7, 9, 11, 20]
+  - [x] 7.1 `src/components/theme-provider.tsx` (다크/라이트, localStorage)
+  - [x] 7.2 `src/components/modern-nav.tsx` (메뉴 항목, 헬스뱃지, 사용자 아바타, 로그아웃 버튼)
+  - [x] 7.3 `src/components/page-layout.tsx`
+  - [x] 7.4 `src/components/chat-markdown.tsx` (react-markdown + rehype-raw + remark-gfm)
+  - [x] 7.5 `src/components/typing-indicator.tsx`
 
-- [ ] 8. 라우팅 및 앱 진입점: App.tsx(ThemeProvider + AuthProvider + RelayEnvironmentProvider + Router + Toaster), Routes(/login, /, /chatbot/:id) [Requirement 13, 20]
-  - [ ] 8.1 src/main.tsx + src/App.tsx (provider 스택)
-  - [ ] 8.2 라우트 설정 (react-router-dom: /login, /, /chatbot/:id)
+- [x] 8. 라우팅 및 앱 진입점: App.tsx(ThemeProvider + AuthProvider + RelayEnvironmentProvider + Router + Toaster), Routes(/login, /, /chatbot/:id) [Requirement 13, 20]
+  - [x] 8.1 src/main.tsx + src/App.tsx (provider 스택)
+  - [x] 8.2 라우트 설정 (react-router-dom: /login, /, /chatbot/:id)
 
-- [ ] 9. 챗봇 목록 화면 (Relay): ChatbotListPage(useLazyLoadQuery → ChatbotsQuery), ChatbotCard(useFragment), ChatbotCreateDialog(useMutation → CreateChatbot), ChatbotDeleteDialog(useMutation → DeleteChatbot) [Requirement 14]
-  - [ ] 9.1 GraphQL queries/mutations + relay-compiler 실행
-  - [ ] 9.2 chatbot-list-page.tsx + chatbot-list.tsx (카드 그리드, 빈 상태)
-  - [ ] 9.3 chatbot-create-dialog.tsx + chatbot-delete-dialog.tsx (mutations)
+- [x] 9. 챗봇 목록 화면 (Relay): ChatbotListPage(useLazyLoadQuery → ChatbotsQuery), ChatbotCard(useFragment), ChatbotCreateDialog(useMutation → CreateChatbot), ChatbotDeleteDialog(useMutation → DeleteChatbot) [Requirement 14]
+  - [x] 9.1 GraphQL queries/mutations + relay-compiler 실행
+  - [x] 9.2 chatbot-list-page.tsx + chatbot-list.tsx (카드 그리드, 빈 상태)
+  - [x] 9.3 chatbot-create-dialog.tsx + chatbot-delete-dialog.tsx (mutations)
 
-- [ ] 10. 챗봇 대화 화면 - 세션 사이드바 (Relay): ChatbotDetailPage(useLazyLoadQuery), ChatbotSessionList(useFragment + usePaginationFragment), 새 채팅(useMutation), 세션 삭제(useMutation), 접기/펼치기 [Requirement 2]
-  - [ ] 10.1 chatbot-detail-page.tsx (쿼리 + 레이아웃)
-  - [ ] 10.2 chatbot-session-list.tsx (Fragment, pagination, 접기/펼치기)
-  - [ ] 10.3 세션 생성/삭제 mutations + Relay store update
+- [x] 10. 챗봇 대화 화면 - 세션 사이드바 (Relay): ChatbotDetailPage(useLazyLoadQuery), ChatbotSessionList(useFragment + usePaginationFragment), 새 채팅(useMutation), 세션 삭제(useMutation), 접기/펼치기 [Requirement 2]
+  - [x] 10.1 chatbot-detail-page.tsx (쿼리 + 레이아웃)
+  - [x] 10.2 chatbot-session-list.tsx (Fragment, pagination, 접기/펼치기)
+  - [x] 10.3 세션 생성/삭제 mutations + Relay store update
 
-- [ ] 11. 채팅 영역 (Relay): ChatRoom(환영/메시지), ChatRoomMessages(useFragment → 메시지 목록), ChatRoomPending(타이핑), ChatRoomTools(tool_calls/sources), ChatRoomInput(Enter/Shift+Enter/IME), useMutation(SendChat) + Relay store update [Requirement 4, 5, 6, 7, 8, 12]
-  - [ ] 11.1 chat-room.tsx + chat-room-messages.tsx (Relay Fragment, 자동 스크롤)
-  - [ ] 11.2 chat-room-input.tsx (Enter/Shift+Enter/IME, 자동높이, disabled)
-  - [ ] 11.3 chat-room-pending.tsx + chat-room-tools.tsx
-  - [ ] 11.4 SendChat mutation + optimistic update + Relay connection update
+- [x] 11. 채팅 영역 (Relay): ChatRoom(환영/메시지), ChatRoomMessages(useFragment → 메시지 목록), ChatRoomPending(타이핑), ChatRoomTools(tool_calls/sources), ChatRoomInput(Enter/Shift+Enter/IME), useMutation(SendChat) + Relay store update [Requirement 4, 5, 6, 7, 8, 12]
+  - [x] 11.1 chat-room.tsx + chat-room-messages.tsx (Relay Fragment, 자동 스크롤)
+  - [x] 11.2 chat-room-input.tsx (Enter/Shift+Enter/IME, 자동높이, disabled)
+  - [x] 11.3 chat-room-pending.tsx + chat-room-tools.tsx
+  - [x] 11.4 SendChat mutation + optimistic update + Relay connection update
 
-- [ ] 12. 챗봇 설정 (Relay): ChatbotSettings Dialog(Tabs: 기본/프롬프트/가드레일/도구), UpdateChatbot mutation, guardrails CRUD mutations, tool_agents 토글 mutations [Requirement 15, 16, 17, 18, 19]
-  - [ ] 12.1 chatbot-settings.tsx (Dialog + Tabs)
-  - [ ] 12.2 chatbot-settings-basic.tsx (title, description, model Select)
-  - [ ] 12.3 chatbot-settings-prompt.tsx (Textarea)
-  - [ ] 12.4 chatbot-settings-guard.tsx (규칙 CRUD)
-  - [ ] 12.5 chatbot-settings-tool.tsx (에이전트 Switch 토글)
+- [x] 12. 챗봇 설정 (Relay): ChatbotSettings Dialog(Tabs: 기본/프롬프트/가드레일/도구), UpdateChatbot mutation, guardrails CRUD mutations, tool_agents 토글 mutations [Requirement 15, 16, 17, 18, 19]
+  - [x] 12.1 chatbot-settings.tsx (Dialog + Tabs)
+  - [x] 12.2 chatbot-settings-basic.tsx (title, description, model Select)
+  - [x] 12.3 chatbot-settings-prompt.tsx (Textarea)
+  - [x] 12.4 chatbot-settings-guard.tsx (규칙 CRUD)
+  - [x] 12.5 chatbot-settings-tool.tsx (에이전트 Switch 토글)
 
-- [ ] 13. 에이전트 선택 & 헬스체크: 에이전트 칩 영역(GET /agent/supervisor/agents → fetch), 헬스체크 뱃지(GET /health → 30초 polling) [Requirement 10, 11]
-  - [ ] 13.1 에이전트 칩 선택 UI (REST API fetch, 별도 hook)
-  - [ ] 13.2 헬스체크 뱃지 (30초 interval polling)
+- [x] 13. 에이전트 선택 & 헬스체크: 에이전트 칩 영역(GET /agent/supervisor/agents → fetch), 헬스체크 뱃지(GET /health → 30초 polling) [Requirement 10, 11]
+  - [x] 13.1 에이전트 칩 선택 UI (REST API fetch, 별도 hook)
+  - [x] 13.2 헬스체크 뱃지 (30초 interval polling)
 
-- [ ] 14. 빌드 및 통합: frontend 빌드 → FastAPI 서빙, schema.graphql 추출 자동화, docker-compose up으로 전체 스택 가동 확인 [Requirement 13]
-  - [ ] 14.1 frontend/package.json 빌드 스크립트 + relay-compiler
-  - [ ] 14.2 app/main.py 수정 (frontend/dist/ StaticFiles 서빙)
-  - [ ] 14.3 docker-compose up 전체 스택 통합 테스트
+- [x] 14. 빌드 및 통합: frontend 빌드 → FastAPI 서빙, schema.graphql 추출 자동화, docker-compose up으로 전체 스택 가동 확인 [Requirement 13]
+  - [x] 14.1 frontend/package.json 빌드 스크립트 + relay-compiler
+  - [x] 14.2 app/main.py 수정 (frontend/dist/ StaticFiles 서빙)
+  - [x] 14.3 docker-compose up 전체 스택 통합 테스트
 
 ## Task Dependency Graph
 
