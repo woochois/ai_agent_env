@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Ops</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; height: 100vh; display: flex; flex-direction: column; }
+        header { background: #16213e; padding: 16px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #0f3460; }
+        header h1 { font-size: 1.2rem; color: #4fc3f7; }
+        header .status { margin-left: auto; font-size: 0.8rem; padding: 4px 10px; border-radius: 12px; background: #2d2d44; }
+        header .status.healthy { color: #66bb6a; }
+        header .status.unhealthy { color: #ef5350; }
+        .container { display: flex; flex: 1; overflow: hidden; }
+        .sidebar { width: 260px; background: #16213e; border-right: 1px solid #0f3460; padding: 16px; overflow-y: auto; }
+        .sidebar h3 { font-size: 0.85rem; color: #90caf9; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .agent-list { list-style: none; }
+        .agent-list li { padding: 8px 12px; margin-bottom: 4px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; }
+        .agent-list li:hover { background: #0f3460; }
+        .agent-list li.active { background: #0f3460; color: #4fc3f7; }
+        .chat-area { flex: 1; display: flex; flex-direction: column; }
+        .messages { flex: 1; overflow-y: auto; padding: 24px; }
+        .message { max-width: 70%; margin-bottom: 16px; padding: 12px 16px; border-radius: 12px; line-height: 1.5; font-size: 0.9rem; white-space: pre-wrap; }
+        .message.user { background: #0f3460; margin-left: auto; border-bottom-right-radius: 4px; }
+        .message.bot { background: #2d2d44; margin-right: auto; border-bottom-left-radius: 4px; }
+        .message .meta { font-size: 0.7rem; color: #888; margin-top: 6px; }
+        .input-area { padding: 16px 24px; background: #16213e; border-top: 1px solid #0f3460; display: flex; gap: 12px; }
+        .input-area input { flex: 1; padding: 12px 16px; border: 1px solid #0f3460; border-radius: 8px; background: #1a1a2e; color: #eee; font-size: 0.9rem; outline: none; }
+        .input-area input:focus { border-color: #4fc3f7; }
+        .input-area button { padding: 12px 24px; background: #4fc3f7; color: #1a1a2e; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .input-area button:hover { background: #81d4fa; }
+        .input-area button:disabled { background: #555; cursor: not-allowed; }
+        .tools-used { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+        .tools-used span { background: #0f3460; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; color: #4fc3f7; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🤖 AI Agent Ops</h1>
+        <div class="status" id="health-status">연결 중...</div>
+    </header>
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Tool Agents</h3>
+            <ul class="agent-list" id="agent-list">
+                <li>로딩 중...</li>
+            </ul>
+        </aside>
+        <main class="chat-area">
+            <div class="messages" id="messages">
+                <div class="message bot">안녕하세요! AI Agent Ops입니다. 질문을 입력하세요.</div>
+            </div>
+            <div class="input-area">
+                <input type="text" id="msg-input" placeholder="메시지를 입력하세요..." autocomplete="off" />
+                <button id="send-btn" onclick="sendMessage()">전송</button>
+            </div>
+        </main>
+    </div>
+    <script>
+        const API_BASE = window.location.origin;
+        let selectedAgents = [];
+
+        async function checkHealth() {
+            try {
+                const res = await fetch(`${API_BASE}/health`);
+                const data = await res.json();
+                const el = document.getElementById('health-status');
+                el.textContent = data.status;
+                el.className = 'status ' + data.status;
+            } catch { 
+                document.getElementById('health-status').textContent = '연결 실패';
+                document.getElementById('health-status').className = 'status unhealthy';
+            }
+        }
+
+        async function loadAgents() {
+            try {
+                const res = await fetch(`${API_BASE}/agent/supervisor/agents`);
+                const data = await res.json();
+                const list = document.getElementById('agent-list');
+                list.innerHTML = '';
+                data.agents.forEach(a => {
+                    const li = document.createElement('li');
+                    li.textContent = a.type.replace('_agent', '');
+                    li.dataset.type = a.type;
+                    li.onclick = () => toggleAgent(li, a.type);
+                    list.appendChild(li);
+                });
+            } catch {
+                document.getElementById('agent-list').innerHTML = '<li>로드 실패</li>';
+            }
+        }
+
+        function toggleAgent(li, type) {
+            li.classList.toggle('active');
+            if (selectedAgents.includes(type)) {
+                selectedAgents = selectedAgents.filter(a => a !== type);
+            } else {
+                selectedAgents.push(type);
+            }
+        }
+
+        function addMessage(text, role, extras) {
+            const div = document.createElement('div');
+            div.className = 'message ' + role;
+            div.textContent = text;
+            if (extras && extras.tool_calls && extras.tool_calls.length) {
+                const tools = document.createElement('div');
+                tools.className = 'tools-used';
+                extras.tool_calls.forEach(t => {
+                    const s = document.createElement('span');
+                    s.textContent = '🔧 ' + t;
+                    tools.appendChild(s);
+                });
+                div.appendChild(tools);
+            }
+            document.getElementById('messages').appendChild(div);
+            div.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('msg-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+            input.value = '';
+            addMessage(msg, 'user');
+            document.getElementById('send-btn').disabled = true;
+
+            try {
+                const body = {
+                    message: msg,
+                    tool_agents: selectedAgents.map(type => ({
+                        type: type,
+                        name: type.replace('_agent', ''),
+                        description: '',
+                        config: {}
+                    }))
+                };
+                const res = await fetch(`${API_BASE}/agent/supervisor/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    addMessage(data.response, 'bot', { tool_calls: data.tool_calls || [] });
+                } else {
+                    addMessage(`오류: ${data.message || data.detail || '알 수 없는 에러'}`, 'bot');
+                }
+            } catch (e) {
+                addMessage('서버 연결에 실패했습니다.', 'bot');
+            }
+            document.getElementById('send-btn').disabled = false;
+        }
+
+        document.getElementById('msg-input').addEventListener('keydown', e => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        checkHealth();
+        loadAgents();
+        setInterval(checkHealth, 30000);
+    </script>
+</body>
+</html>

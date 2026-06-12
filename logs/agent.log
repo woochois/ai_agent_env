@@ -11153,3 +11153,78 @@
 {"timestamp": "2026-06-12T01:41:08", "level": "INFO", "message": "HEAD http://elasticsearch:9200/ [status:200 duration:0.001s]"}
 {"timestamp": "2026-06-12T01:41:08", "level": "INFO", "message": "Successfully connected to elasticsearch on attempt 1/3", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
 {"timestamp": "2026-06-12T01:41:08", "level": "INFO", "message": "Application startup complete"}
+{"timestamp": "2026-06-12T04:35:19", "level": "INFO", "message": "GET http://elasticsearch:9200/_cluster/health [status:200 duration:0.003s]"}
+{"timestamp": "2026-06-12T04:35:20", "level": "INFO", "message": "GET http://elasticsearch:9200/_cluster/health [status:200 duration:0.002s]"}
+{"timestamp": "2026-06-12T04:35:39", "level": "INFO", "message": "Application shutdown complete"}
+{"timestamp": null, "level": null, "message": "Supervisor router registered"}
+{"timestamp": null, "level": null, "message": "Ops router registered"}
+{"timestamp": null, "level": null, "message": "Attempting to connect to database (attempt 1/3)", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": null, "level": null, "message": "Successfully connected to database on attempt 1/3", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": null, "level": null, "message": "Attempting to connect to elasticsearch (attempt 1/3)", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": null, "level": null, "message": "HEAD http://elasticsearch:9200/ [status:200 duration:0.001s]"}
+{"timestamp": null, "level": null, "message": "Successfully connected to elasticsearch on attempt 1/3", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": null, "level": null, "message": "Application startup complete"}
+{"timestamp": null, "level": null, "message": "Application shutdown complete"}
+{"timestamp": null, "level": null, "message": "Attempting to connect to database (attempt 1/3)", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": null, "level": null, "message": "Successfully connected to database on attempt 1/3", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": null, "level": null, "message": "Attempting to connect to elasticsearch (attempt 1/3)", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": null, "level": null, "message": "HEAD http://elasticsearch:9200/ [status:200 duration:0.002s]"}
+{"timestamp": null, "level": null, "message": "Successfully connected to elasticsearch on attempt 1/3", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": null, "level": null, "message": "Application startup complete"}
+{"timestamp": null, "level": null, "message": "Application shutdown complete"}
+{"timestamp": "2026-06-12T04:41:29", "level": "INFO", "message": "Supervisor router registered"}
+{"timestamp": "2026-06-12T04:41:29", "level": "INFO", "message": "Ops router registered"}
+{"timestamp": "2026-06-12T04:41:29", "level": "INFO", "message": "Attempting to connect to database (attempt 1/3)", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:29", "level": "INFO", "message": "Successfully connected to database on attempt 1/3", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:29", "level": "INFO", "message": "Attempting to connect to elasticsearch (attempt 1/3)", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:29", "level": "INFO", "message": "HEAD http://elasticsearch:9200/ [status:200 duration:0.001s]"}
+{"timestamp": "2026-06-12T04:41:29", "level": "INFO", "message": "Successfully connected to elasticsearch on attempt 1/3", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:29", "level": "INFO", "message": "Application startup complete"}
+{"timestamp": "2026-06-12T04:41:29", "level": "INFO", "message": "Application shutdown complete"}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Supervisor router registered"}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Ops router registered"}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Attempting to connect to database (attempt 1/3)", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Successfully connected to database on attempt 1/3", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Attempting to connect to elasticsearch (attempt 1/3)", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "HEAD http://elasticsearch:9200/ [status:200 duration:0.001s]"}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Successfully connected to elasticsearch on attempt 1/3", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Application startup complete"}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Application shutdown complete"}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Supervisor router registered"}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Ops router registered"}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Attempting to connect to database (attempt 1/3)", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Successfully connected to database on attempt 1/3", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Attempting to connect to elasticsearch (attempt 1/3)", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "HEAD http://elasticsearch:9200/ [status:200 duration:0.001s]"}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Successfully connected to elasticsearch on attempt 1/3", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:30", "level": "INFO", "message": "Application startup complete"}
+{"timestamp": "2026-06-12T04:41:31", "level": "INFO", "message": "Application shutdown complete"}
+{"timestamp": "2026-06-12T04:41:31", "level": "INFO", "message": "Supervisor router registered"}
+{"timestamp": "2026-06-12T04:41:31", "level": "INFO", "message": "Ops router registered"}
+{"timestamp": "2026-06-12T04:41:31", "level": "INFO", "message": "Attempting to connect to database (attempt 1/3)", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:31", "level": "INFO", "message": "Successfully connected to database on attempt 1/3", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:31", "level": "INFO", "message": "Attempting to connect to elasticsearch (attempt 1/3)", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:31", "level": "INFO", "message": "HEAD http://elasticsearch:9200/ [status:200 duration:0.001s]"}
+{"timestamp": "2026-06-12T04:41:31", "level": "INFO", "message": "Successfully connected to elasticsearch on attempt 1/3", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:41:31", "level": "INFO", "message": "Application startup complete"}
+{"timestamp": "2026-06-12T04:42:31", "level": "INFO", "message": "GET http://elasticsearch:9200/_cluster/health [status:200 duration:0.003s]"}
+{"timestamp": "2026-06-12T04:42:46", "level": "INFO", "message": "GET http://elasticsearch:9200/_cluster/health [status:200 duration:0.004s]"}
+{"timestamp": "2026-06-12T04:42:50", "level": "INFO", "message": "GET http://elasticsearch:9200/_cluster/health [status:200 duration:0.002s]"}
+{"timestamp": "2026-06-12T04:46:45", "level": "INFO", "message": "Application shutdown complete"}
+{"timestamp": "2026-06-12T04:46:45", "level": "INFO", "message": "Supervisor router registered"}
+{"timestamp": "2026-06-12T04:46:45", "level": "INFO", "message": "Ops router registered"}
+{"timestamp": "2026-06-12T04:46:45", "level": "INFO", "message": "Attempting to connect to database (attempt 1/3)", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:46:45", "level": "INFO", "message": "Successfully connected to database on attempt 1/3", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:46:45", "level": "INFO", "message": "Attempting to connect to elasticsearch (attempt 1/3)", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:46:45", "level": "INFO", "message": "HEAD http://elasticsearch:9200/ [status:200 duration:0.001s]"}
+{"timestamp": "2026-06-12T04:46:45", "level": "INFO", "message": "Successfully connected to elasticsearch on attempt 1/3", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:46:45", "level": "INFO", "message": "Application startup complete"}
+{"timestamp": "2026-06-12T04:46:52", "level": "INFO", "message": "Application shutdown complete"}
+{"timestamp": "2026-06-12T04:46:53", "level": "INFO", "message": "Supervisor router registered"}
+{"timestamp": "2026-06-12T04:46:53", "level": "INFO", "message": "Ops router registered"}
+{"timestamp": "2026-06-12T04:46:53", "level": "INFO", "message": "Attempting to connect to database (attempt 1/3)", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:46:53", "level": "INFO", "message": "Successfully connected to database on attempt 1/3", "service": "database", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:46:53", "level": "INFO", "message": "Attempting to connect to elasticsearch (attempt 1/3)", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:46:53", "level": "INFO", "message": "HEAD http://elasticsearch:9200/ [status:200 duration:0.001s]"}
+{"timestamp": "2026-06-12T04:46:53", "level": "INFO", "message": "Successfully connected to elasticsearch on attempt 1/3", "service": "elasticsearch", "attempt": 1, "max_retries": 3}
+{"timestamp": "2026-06-12T04:46:53", "level": "INFO", "message": "Application startup complete"}
