@@ -13,6 +13,21 @@ services:
     volumes:
       - ./logs:/app/logs
 
+  graphql-server:
+    build: ./graphql-server
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/agent_db
+      JWT_SECRET: ${JWT_SECRET:-playground-jwt-secret-key}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-playground-refresh-secret-key}
+      DOMAIN_SERVER_URL: http://app:8000
+      PORT: 4000
+      HOST: 0.0.0.0
+    depends_on:
+      - postgres
+      - app
+
   postgres:
     image: postgres:16-alpine
     environment:
@@ -23,6 +38,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   elasticsearch:
     image: elasticsearch:8.11.0

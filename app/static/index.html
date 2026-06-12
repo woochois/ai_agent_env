@@ -1,135 +1,1224 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent Ops</title>
+    <title>AI Agent Playground</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
+        :root {
+            --teal-50: #f0fdfa;
+            --teal-100: #ccfbf1;
+            --teal-200: #99f6e4;
+            --teal-300: #5eead4;
+            --teal-400: #2dd4bf;
+            --teal-500: #14b8a6;
+            --teal-600: #0d9488;
+            --teal-700: #0f766e;
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-muted: rgba(0,0,0,0.03);
+            --bg-input: #ffffff;
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --user-bubble-bg: rgba(20,184,166,0.9);
+            --user-bubble-text: #fff;
+            --bot-icon-bg: var(--teal-100);
+            --user-icon-bg: var(--teal-100);
+            --nav-active-bg: linear-gradient(to right, rgba(240,253,250,0.8), rgba(219,234,254,0.6), rgba(240,253,250,0.8));
+            --session-active-border: var(--teal-300);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-card: #1e293b;
+            --bg-muted: rgba(255,255,255,0.03);
+            --bg-input: #1e293b;
+            --border-color: #334155;
+            --border-light: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4);
+            --user-bubble-bg: rgba(20,184,166,0.15);
+            --user-bubble-text: var(--teal-100);
+            --bot-icon-bg: rgba(13,148,136,0.2);
+            --user-icon-bg: rgba(13,148,136,0.2);
+            --nav-active-bg: linear-gradient(to right, rgba(13,148,136,0.1), rgba(37,99,235,0.05), rgba(13,148,136,0.1));
+            --session-active-border: var(--teal-600);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; height: 100vh; display: flex; flex-direction: column; }
-        header { background: #16213e; padding: 16px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #0f3460; }
-        header h1 { font-size: 1.2rem; color: #4fc3f7; }
-        header .status { margin-left: auto; font-size: 0.8rem; padding: 4px 10px; border-radius: 12px; background: #2d2d44; }
-        header .status.healthy { color: #66bb6a; }
-        header .status.unhealthy { color: #ef5350; }
-        .container { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: 260px; background: #16213e; border-right: 1px solid #0f3460; padding: 16px; overflow-y: auto; }
-        .sidebar h3 { font-size: 0.85rem; color: #90caf9; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .agent-list { list-style: none; }
-        .agent-list li { padding: 8px 12px; margin-bottom: 4px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; }
-        .agent-list li:hover { background: #0f3460; }
-        .agent-list li.active { background: #0f3460; color: #4fc3f7; }
-        .chat-area { flex: 1; display: flex; flex-direction: column; }
-        .messages { flex: 1; overflow-y: auto; padding: 24px; }
-        .message { max-width: 70%; margin-bottom: 16px; padding: 12px 16px; border-radius: 12px; line-height: 1.5; font-size: 0.9rem; white-space: pre-wrap; }
-        .message.user { background: #0f3460; margin-left: auto; border-bottom-right-radius: 4px; }
-        .message.bot { background: #2d2d44; margin-right: auto; border-bottom-left-radius: 4px; }
-        .message .meta { font-size: 0.7rem; color: #888; margin-top: 6px; }
-        .input-area { padding: 16px 24px; background: #16213e; border-top: 1px solid #0f3460; display: flex; gap: 12px; }
-        .input-area input { flex: 1; padding: 12px 16px; border: 1px solid #0f3460; border-radius: 8px; background: #1a1a2e; color: #eee; font-size: 0.9rem; outline: none; }
-        .input-area input:focus { border-color: #4fc3f7; }
-        .input-area button { padding: 12px 24px; background: #4fc3f7; color: #1a1a2e; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .input-area button:hover { background: #81d4fa; }
-        .input-area button:disabled { background: #555; cursor: not-allowed; }
-        .tools-used { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
-        .tools-used span { background: #0f3460; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; color: #4fc3f7; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* === 좌측 네비게이션 === */
+        .nav-sidebar {
+            width: 256px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(8px);
+            box-shadow: 2px 0 6px -1px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-header {
+            padding: 20px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-header h1 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--teal-600);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section-title {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding: 0 12px;
+            margin-bottom: 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 4px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-muted);
+            transform: scale(1.01);
+        }
+
+        .nav-item.active {
+            background: var(--nav-active-bg);
+            color: var(--blue-700);
+            border-color: transparent;
+            box-shadow: var(--shadow-sm);
+            transform: scale(1.02);
+        }
+
+        [data-theme="dark"] .nav-item.active {
+            color: var(--blue-100);
+        }
+
+        .nav-item-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            font-size: 12px;
+        }
+
+        .nav-item.active .nav-item-icon {
+            background: var(--blue-50);
+            color: var(--blue-700);
+        }
+
+        [data-theme="dark"] .nav-item.active .nav-item-icon {
+            background: rgba(37,99,235,0.2);
+            color: var(--blue-100);
+        }
+
+        .nav-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .theme-toggle {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .health-badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .health-badge.healthy { color: #22c55e; }
+        .health-badge.unhealthy { color: #ef4444; }
+        .health-badge.degraded { color: #f59e0b; }
+
+        /* === 메인 영역 === */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* === 페이지 헤더 === */
+        .page-header {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .page-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .page-header-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* === 플레이그라운드 영역 === */
+        .playground-area {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* === 세션 사이드바 === */
+        .session-sidebar {
+            width: 240px;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-primary);
+            flex-shrink: 0;
+            transition: width 0.3s ease, opacity 0.3s ease;
+        }
+
+        .session-sidebar.collapsed {
+            width: 0;
+            overflow: hidden;
+            opacity: 0;
+            border-right: none;
+        }
+
+        .session-header {
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+        }
+
+        .session-header-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-new-chat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--teal-600);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-new-chat:hover {
+            background: var(--teal-50);
+        }
+
+        [data-theme="dark"] .btn-new-chat:hover {
+            background: rgba(13,148,136,0.1);
+        }
+
+        .btn-collapse {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-collapse:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .session-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .session-card {
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+        }
+
+        .session-card:hover {
+            transform: scale(1.01);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .session-card.active {
+            border-color: var(--session-active-border);
+            background: var(--bg-card);
+        }
+
+        .session-card-inner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .session-card-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            font-size: 11px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .session-card.active .session-card-icon {
+            background: linear-gradient(135deg, var(--teal-100), var(--teal-200));
+            color: var(--teal-700);
+        }
+
+        [data-theme="dark"] .session-card.active .session-card-icon {
+            background: rgba(13,148,136,0.3);
+            color: var(--teal-300);
+        }
+
+        .session-card-title {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .session-card-delete {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .session-card:hover .session-card-delete {
+            display: flex;
+        }
+
+        .session-card-delete:hover {
+            background: #fecaca;
+            color: #dc2626;
+        }
+
+        .session-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 24px;
+            text-align: center;
+        }
+
+        /* === 채팅 영역 === */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            position: relative;
+        }
+
+        .btn-expand {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 10;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-expand:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .btn-expand.visible {
+            display: flex;
+        }
+
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 24px;
+            background: var(--bg-muted);
+            scrollbar-gutter: stable;
+        }
+
+        .messages-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 100%;
+        }
+
+        /* 환영 메시지 */
+        .welcome-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .welcome-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--teal-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            font-size: 32px;
+        }
+
+        [data-theme="dark"] .welcome-icon {
+            background: rgba(13,148,136,0.2);
+        }
+
+        .welcome-area h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .welcome-area p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 400px;
+        }
+
+        /* 메시지 */
+        .message-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message-user {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .message-bot {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .avatar-user {
+            background: var(--user-icon-bg);
+            color: var(--teal-600);
+        }
+
+        .avatar-bot {
+            background: var(--bot-icon-bg);
+            color: var(--teal-600);
+        }
+
+        .user-bubble {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            background: var(--user-bubble-bg);
+            color: var(--user-bubble-text);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        [data-theme="dark"] .user-bubble {
+            border: 1px solid var(--teal-300);
+        }
+
+        .bot-content {
+            max-width: 80%;
+            min-width: 0;
+        }
+
+        .bot-content .markdown-body {
+            font-size: 0.875rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        .bot-content .markdown-body p { margin: 8px 0; }
+        .bot-content .markdown-body h1 { font-size: 1.1rem; font-weight: 700; margin: 12px 0 8px; }
+        .bot-content .markdown-body h2 { font-size: 1rem; font-weight: 600; margin: 10px 0 6px; }
+        .bot-content .markdown-body h3 { font-size: 0.9rem; font-weight: 600; margin: 8px 0 4px; }
+        .bot-content .markdown-body ul, .bot-content .markdown-body ol { padding-left: 20px; margin: 8px 0; }
+        .bot-content .markdown-body li { margin: 4px 0; }
+        .bot-content .markdown-body code {
+            background: var(--bg-tertiary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+        .bot-content .markdown-body pre {
+            background: var(--bg-tertiary);
+            padding: 12px 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .bot-content .markdown-body pre code {
+            background: transparent;
+            padding: 0;
+        }
+        .bot-content .markdown-body blockquote {
+            border-left: 4px solid var(--teal-500);
+            padding: 8px 16px;
+            margin: 12px 0;
+            background: var(--teal-50);
+            border-radius: 0 8px 8px 0;
+        }
+        [data-theme="dark"] .bot-content .markdown-body blockquote {
+            background: rgba(13,148,136,0.1);
+        }
+        .bot-content .markdown-body table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 12px 0;
+            overflow-x: auto;
+            display: block;
+        }
+        .bot-content .markdown-body th, .bot-content .markdown-body td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            font-size: 0.8rem;
+        }
+        .bot-content .markdown-body th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+        }
+        .bot-content .markdown-body a {
+            color: var(--teal-600);
+            text-decoration: underline;
+        }
+
+        .elapsed-time {
+            font-size: 0.7rem;
+            color: rgba(37,99,235,0.7);
+            margin-top: 4px;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .message-group:hover .message-time {
+            opacity: 1;
+        }
+
+        /* 타이핑 인디케이터 */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--teal-500);
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-4px); opacity: 1; }
+        }
+
+        .streaming-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--teal-500);
+            animation: pulse 1s infinite;
+            margin-left: 4px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* 도구 결과 */
+        .tool-results {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .tool-card {
+            border: 1px solid var(--teal-200);
+            border-radius: 8px;
+            padding: 12px;
+            background: var(--bg-primary);
+            font-size: 0.8rem;
+        }
+
+        [data-theme="dark"] .tool-card {
+            border-color: var(--teal-700);
+        }
+
+        .tool-card-header {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--teal-700);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        [data-theme="dark"] .tool-card-header {
+            color: var(--teal-300);
+        }
+
+        /* === 입력 영역 === */
+        .input-area {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-container {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 8px;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            transition: border-color 0.2s;
+        }
+
+        [data-theme="dark"] .input-container {
+            background: var(--bg-tertiary);
+            border: none;
+        }
+
+        .input-container:focus-within {
+            border-color: var(--teal-400);
+        }
+
+        .input-container textarea {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            line-height: 1.4;
+            resize: none;
+            outline: none;
+            padding: 4px 8px;
+            max-height: 144px;
+            min-height: 20px;
+            font-family: inherit;
+        }
+
+        .input-container textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .btn-send {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--teal-500);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .btn-send:hover:not(:disabled) {
+            background: var(--teal-600);
+            transform: scale(1.05);
+        }
+
+        .btn-send:disabled {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        /* === 에이전트 선택 === */
+        .agents-panel {
+            padding: 8px 16px 0;
+        }
+
+        .agents-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .agents-toggle:hover {
+            background: var(--bg-muted);
+            color: var(--text-secondary);
+        }
+
+        .agents-grid {
+            display: none;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px 0;
+        }
+
+        .agents-grid.open {
+            display: flex;
+        }
+
+        .agent-chip {
+            padding: 4px 10px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+        }
+
+        .agent-chip.selected {
+            border-color: var(--teal-400);
+            background: var(--teal-50);
+            color: var(--teal-700);
+        }
+
+        [data-theme="dark"] .agent-chip.selected {
+            background: rgba(13,148,136,0.15);
+            color: var(--teal-300);
+        }
+
+        /* 스크롤바 스타일 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* 로딩 스피너 */
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--teal-200);
+            border-top-color: var(--teal-600);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>🤖 AI Agent Ops</h1>
-        <div class="status" id="health-status">연결 중...</div>
-    </header>
-    <div class="container">
-        <aside class="sidebar">
-            <h3>Tool Agents</h3>
-            <ul class="agent-list" id="agent-list">
-                <li>로딩 중...</li>
-            </ul>
-        </aside>
-        <main class="chat-area">
-            <div class="messages" id="messages">
-                <div class="message bot">안녕하세요! AI Agent Ops입니다. 질문을 입력하세요.</div>
+    <!-- 좌측 네비게이션 -->
+    <nav class="nav-sidebar">
+        <div class="nav-header">
+            <h1>🤖 AI Agent Ops</h1>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-section-title">메인 메뉴</div>
+            <div class="nav-item" data-page="dashboard">
+                <div class="nav-item-icon">📊</div>
+                <span>대시보드</span>
             </div>
-            <div class="input-area">
-                <input type="text" id="msg-input" placeholder="메시지를 입력하세요..." autocomplete="off" />
-                <button id="send-btn" onclick="sendMessage()">전송</button>
+            <div class="nav-item" data-page="agents">
+                <div class="nav-item-icon">✨</div>
+                <span>에이전트</span>
             </div>
-        </main>
-    </div>
-    <script>
-        const API_BASE = window.location.origin;
-        let selectedAgents = [];
+            <div class="nav-item active" data-page="playground">
+                <div class="nav-item-icon">💬</div>
+                <span>플레이그라운드</span>
+            </div>
+            <div class="nav-section-title" style="margin-top:24px;">도움말 & 지원</div>
+            <div class="nav-item" onclick="window.open('/docs','_blank')">
+                <div class="nav-item-icon">📄</div>
+                <span>API 문서</span>
+            </div>
+        </div>
+        <div class="nav-footer">
+            <span class="health-badge" id="health-status">연결 중...</span>
+            <button class="theme-toggle" onclick="toggleTheme()" title="테마 전환">🌙</button>
+        </div>
+    </nav>
 
+    <!-- 메인 영역 -->
+    <div class="main-content">
+        <!-- 페이지 헤더 -->
+        <div class="page-header">
+            <div>
+                <h2>플레이그라운드</h2>
+                <div class="page-header-desc">AI 에이전트와 실시간으로 대화해보세요</div>
+            </div>
+        </div>
+
+        <!-- 플레이그라운드 -->
+        <div class="playground-area">
+            <!-- 세션 사이드바 -->
+            <div class="session-sidebar" id="session-sidebar">
+                <div class="session-header">
+                    <div class="session-header-left">
+                        <button class="btn-new-chat" onclick="createNewSession()">
+                            <span>＋</span> 새 채팅
+                        </button>
+                    </div>
+                    <button class="btn-collapse" onclick="toggleSessionSidebar()" title="접기">
+                        ‹
+                    </button>
+                </div>
+                <div class="session-list" id="session-list">
+                    <div class="session-empty">
+                        <p>새 채팅을 시작해보세요</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 채팅 영역 -->
+            <div class="chat-area">
+                <button class="btn-expand" id="btn-expand" onclick="toggleSessionSidebar()" title="펼치기">
+                    ›
+                </button>
+                <div class="messages-area" id="messages-area">
+                    <div class="welcome-area" id="welcome-area">
+                        <div class="welcome-icon">💬</div>
+                        <h3>새로운 채팅을 시작해보세요</h3>
+                        <p>궁금한 것을 물어보거나 도움이 필요한 일이 있으면<br>언제든 말씀해주세요</p>
+                    </div>
+                    <div class="messages-container" id="messages-container" style="display:none;"></div>
+                </div>
+
+                <!-- 에이전트 선택 -->
+                <div class="agents-panel">
+                    <div class="agents-toggle" onclick="toggleAgentsPanel()">
+                        <span>🔧</span>
+                        <span id="agents-toggle-text">에이전트 선택</span>
+                        <span id="agents-toggle-arrow">▸</span>
+                    </div>
+                    <div class="agents-grid" id="agents-grid"></div>
+                </div>
+
+                <!-- 입력 영역 -->
+                <div class="input-area">
+                    <div class="input-container">
+                        <textarea 
+                            id="msg-input" 
+                            placeholder="메시지를 입력하세요" 
+                            rows="1"
+                            maxlength="5000"></textarea>
+                        <button class="btn-send" id="btn-send" onclick="sendMessage()" disabled>
+                            ➤
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === 상태 관리 ===
+        const API_BASE = window.location.origin;
+        let sessions = []; // { id, title, messages: [{role, content, toolCalls, time}] }
+        let activeSessionId = null;
+        let selectedAgents = [];
+        let isStreaming = false;
+        let sessionSidebarCollapsed = false;
+
+        // === 초기화 ===
+        document.addEventListener('DOMContentLoaded', () => {
+            checkHealth();
+            loadAgents();
+            setupTextarea();
+            setInterval(checkHealth, 30000);
+
+            // 저장된 세션 복원
+            const saved = localStorage.getItem('playground_sessions');
+            if (saved) {
+                try {
+                    sessions = JSON.parse(saved);
+                    renderSessionList();
+                } catch(e) {}
+            }
+        });
+
+        // === 테마 전환 ===
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            document.querySelector('.theme-toggle').textContent = next === 'dark' ? '🌙' : '☀️';
+            localStorage.setItem('theme', next);
+        }
+
+        // 저장된 테마 적용
+        (function() {
+            const saved = localStorage.getItem('theme');
+            if (saved) {
+                document.documentElement.setAttribute('data-theme', saved);
+                if (saved === 'light') {
+                    document.querySelector('.theme-toggle').textContent = '☀️';
+                }
+            }
+        })();
+
+        // === 헬스체크 ===
         async function checkHealth() {
             try {
                 const res = await fetch(`${API_BASE}/health`);
                 const data = await res.json();
                 const el = document.getElementById('health-status');
-                el.textContent = data.status;
-                el.className = 'status ' + data.status;
-            } catch { 
-                document.getElementById('health-status').textContent = '연결 실패';
-                document.getElementById('health-status').className = 'status unhealthy';
+                el.textContent = data.status === 'healthy' ? '● 정상' : data.status === 'degraded' ? '● 부분 장애' : '● 연결 실패';
+                el.className = 'health-badge ' + data.status;
+            } catch {
+                const el = document.getElementById('health-status');
+                el.textContent = '● 연결 실패';
+                el.className = 'health-badge unhealthy';
             }
         }
 
+        // === 에이전트 목록 ===
         async function loadAgents() {
             try {
                 const res = await fetch(`${API_BASE}/agent/supervisor/agents`);
                 const data = await res.json();
-                const list = document.getElementById('agent-list');
-                list.innerHTML = '';
+                const grid = document.getElementById('agents-grid');
+                grid.innerHTML = '';
                 data.agents.forEach(a => {
-                    const li = document.createElement('li');
-                    li.textContent = a.type.replace('_agent', '');
-                    li.dataset.type = a.type;
-                    li.onclick = () => toggleAgent(li, a.type);
-                    list.appendChild(li);
+                    const chip = document.createElement('div');
+                    chip.className = 'agent-chip';
+                    chip.textContent = a.type.replace('_agent', '').replace(/_/g, ' ');
+                    chip.dataset.type = a.type;
+                    chip.onclick = () => toggleAgentSelection(chip, a.type);
+                    grid.appendChild(chip);
                 });
+                updateAgentsToggleText();
             } catch {
-                document.getElementById('agent-list').innerHTML = '<li>로드 실패</li>';
+                document.getElementById('agents-grid').innerHTML = '<span style="color:var(--text-muted);font-size:0.75rem;">에이전트 로드 실패</span>';
             }
         }
 
-        function toggleAgent(li, type) {
-            li.classList.toggle('active');
+        function toggleAgentSelection(chip, type) {
+            chip.classList.toggle('selected');
             if (selectedAgents.includes(type)) {
                 selectedAgents = selectedAgents.filter(a => a !== type);
             } else {
                 selectedAgents.push(type);
             }
+            updateAgentsToggleText();
         }
 
-        function addMessage(text, role, extras) {
-            const div = document.createElement('div');
-            div.className = 'message ' + role;
-            div.textContent = text;
-            if (extras && extras.tool_calls && extras.tool_calls.length) {
-                const tools = document.createElement('div');
-                tools.className = 'tools-used';
-                extras.tool_calls.forEach(t => {
-                    const s = document.createElement('span');
-                    s.textContent = '🔧 ' + t;
-                    tools.appendChild(s);
-                });
-                div.appendChild(tools);
+        function updateAgentsToggleText() {
+            const text = document.getElementById('agents-toggle-text');
+            if (selectedAgents.length === 0) {
+                text.textContent = '에이전트 선택';
+            } else {
+                text.textContent = `에이전트 ${selectedAgents.length}개 선택됨`;
             }
-            document.getElementById('messages').appendChild(div);
-            div.scrollIntoView({ behavior: 'smooth' });
         }
 
+        function toggleAgentsPanel() {
+            const grid = document.getElementById('agents-grid');
+            const arrow = document.getElementById('agents-toggle-arrow');
+            grid.classList.toggle('open');
+            arrow.textContent = grid.classList.contains('open') ? '▾' : '▸';
+        }
+
+        // === 세션 관리 ===
+        function createNewSession() {
+            activeSessionId = null;
+            renderChat();
+            renderSessionList();
+        }
+
+        function selectSession(id) {
+            activeSessionId = id;
+            renderChat();
+            renderSessionList();
+        }
+
+        function deleteSession(id, e) {
+            e.stopPropagation();
+            sessions = sessions.filter(s => s.id !== id);
+            if (activeSessionId === id) {
+                activeSessionId = null;
+                renderChat();
+            }
+            saveSessions();
+            renderSessionList();
+        }
+
+        function renderSessionList() {
+            const list = document.getElementById('session-list');
+            if (sessions.length === 0) {
+                list.innerHTML = '<div class="session-empty"><p>새 채팅을 시작해보세요</p></div>';
+                return;
+            }
+            list.innerHTML = sessions.map(s => `
+                <div class="session-card ${s.id === activeSessionId ? 'active' : ''}" onclick="selectSession('${s.id}')">
+                    <div class="session-card-inner">
+                        <div class="session-card-icon">💬</div>
+                        <span class="session-card-title">${escapeHtml(s.title)}</span>
+                        <button class="session-card-delete" onclick="deleteSession('${s.id}', event)" title="삭제">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleSessionSidebar() {
+            const sidebar = document.getElementById('session-sidebar');
+            const btn = document.getElementById('btn-expand');
+            sessionSidebarCollapsed = !sessionSidebarCollapsed;
+            sidebar.classList.toggle('collapsed', sessionSidebarCollapsed);
+            btn.classList.toggle('visible', sessionSidebarCollapsed);
+        }
+
+        function saveSessions() {
+            try {
+                localStorage.setItem('playground_sessions', JSON.stringify(sessions));
+            } catch(e) {}
+        }
+
+        // === 텍스트 입력 ===
+        function setupTextarea() {
+            const textarea = document.getElementById('msg-input');
+            const sendBtn = document.getElementById('btn-send');
+
+            textarea.addEventListener('input', () => {
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.min(textarea.scrollHeight, 144) + 'px';
+                sendBtn.disabled = !textarea.value.trim() || isStreaming;
+            });
+
+            textarea.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    if (e.isComposing || e.nativeEvent?.isComposing) {
+                        e.preventDefault();
+                        return;
+                    }
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+
+        // === 메시지 전송 ===
         async function sendMessage() {
-            const input = document.getElementById('msg-input');
-            const msg = input.value.trim();
-            if (!msg) return;
-            input.value = '';
-            addMessage(msg, 'user');
-            document.getElementById('send-btn').disabled = true;
+            const textarea = document.getElementById('msg-input');
+            const msg = textarea.value.trim();
+            if (!msg || isStreaming) return;
+
+            textarea.value = '';
+            textarea.style.height = 'auto';
+            document.getElementById('btn-send').disabled = true;
+            isStreaming = true;
+
+            // 새 세션 생성 or 기존 세션에 추가
+            if (!activeSessionId) {
+                const newSession = {
+                    id: 'session_' + Date.now(),
+                    title: msg.slice(0, 20) + (msg.length > 20 ? '...' : ''),
+                    messages: []
+                };
+                sessions.unshift(newSession);
+                activeSessionId = newSession.id;
+                renderSessionList();
+            }
+
+            const session = sessions.find(s => s.id === activeSessionId);
+            if (!session) return;
+
+            // 사용자 메시지 추가
+            session.messages.push({
+                role: 'user',
+                content: msg,
+                time: new Date().toISOString()
+            });
+
+            renderChat();
+            scrollToBottom();
+
+            // 로딩 표시
+            showTypingIndicator();
 
             try {
                 const body = {
                     message: msg,
+                    session_id: activeSessionId,
                     tool_agents: selectedAgents.map(type => ({
                         type: type,
                         name: type.replace('_agent', ''),
@@ -137,30 +1226,202 @@
                         config: {}
                     }))
                 };
+
+                const startTime = Date.now();
                 const res = await fetch(`${API_BASE}/agent/supervisor/chat`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
                 });
+
+                const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
                 const data = await res.json();
+
+                hideTypingIndicator();
+
                 if (res.ok) {
-                    addMessage(data.response, 'bot', { tool_calls: data.tool_calls || [] });
+                    session.messages.push({
+                        role: 'bot',
+                        content: data.response || '응답을 생성할 수 없습니다.',
+                        toolCalls: data.tool_calls || [],
+                        sources: data.sources || [],
+                        elapsed: elapsed,
+                        time: new Date().toISOString()
+                    });
                 } else {
-                    addMessage(`오류: ${data.message || data.detail || '알 수 없는 에러'}`, 'bot');
+                    session.messages.push({
+                        role: 'bot',
+                        content: `오류가 발생했습니다: ${data.message || data.detail || '알 수 없는 에러'}`,
+                        time: new Date().toISOString()
+                    });
                 }
             } catch (e) {
-                addMessage('서버 연결에 실패했습니다.', 'bot');
+                hideTypingIndicator();
+                session.messages.push({
+                    role: 'bot',
+                    content: '서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.',
+                    time: new Date().toISOString()
+                });
             }
-            document.getElementById('send-btn').disabled = false;
+
+            isStreaming = false;
+            document.getElementById('btn-send').disabled = false;
+            saveSessions();
+            renderChat();
+            scrollToBottom();
+            textarea.focus();
         }
 
-        document.getElementById('msg-input').addEventListener('keydown', e => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        // === 렌더링 ===
+        function renderChat() {
+            const welcome = document.getElementById('welcome-area');
+            const container = document.getElementById('messages-container');
 
-        checkHealth();
-        loadAgents();
-        setInterval(checkHealth, 30000);
+            if (!activeSessionId) {
+                welcome.style.display = 'flex';
+                container.style.display = 'none';
+                return;
+            }
+
+            const session = sessions.find(s => s.id === activeSessionId);
+            if (!session || session.messages.length === 0) {
+                welcome.style.display = 'flex';
+                container.style.display = 'none';
+                return;
+            }
+
+            welcome.style.display = 'none';
+            container.style.display = 'flex';
+
+            container.innerHTML = session.messages.map((m, idx) => {
+                if (m.role === 'user') {
+                    return `
+                        <div class="message-group">
+                            <div class="message-user">
+                                <div class="avatar avatar-user">👤</div>
+                                <div>
+                                    <div class="user-bubble">${escapeHtml(m.content)}</div>
+                                    <div class="message-time" style="text-align:right;">${formatTime(m.time)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const toolsHtml = renderToolCalls(m.toolCalls, m.sources);
+                    return `
+                        <div class="message-group">
+                            <div class="message-bot">
+                                <div class="avatar avatar-bot">🤖</div>
+                                <div class="bot-content">
+                                    <div class="markdown-body">${renderMarkdown(m.content)}</div>
+                                    ${m.elapsed ? `<div class="elapsed-time">${m.elapsed}초 동안 생각함</div>` : ''}
+                                    <div class="message-time">${formatTime(m.time)}</div>
+                                    ${toolsHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        function renderToolCalls(toolCalls, sources) {
+            if ((!toolCalls || toolCalls.length === 0) && (!sources || sources.length === 0)) return '';
+
+            let html = '<div class="tool-results">';
+
+            if (toolCalls && toolCalls.length > 0) {
+                html += `
+                    <div class="tool-card">
+                        <div class="tool-card-header">🔧 사용된 도구</div>
+                        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                            ${toolCalls.map(t => `<span style="padding:2px 8px;border-radius:12px;background:var(--teal-50);color:var(--teal-700);font-size:0.7rem;border:1px solid var(--teal-200);">${escapeHtml(t.replace('_agent','').replace(/_/g,' '))}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (sources && sources.length > 0) {
+                html += `
+                    <div class="tool-card">
+                        <div class="tool-card-header">📎 참조 문서</div>
+                        <div style="display:flex;flex-direction:column;gap:4px;">
+                            ${sources.map(s => `<span style="font-size:0.75rem;color:var(--text-secondary);">• ${escapeHtml(s)}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        function showTypingIndicator() {
+            const container = document.getElementById('messages-container');
+            const indicator = document.createElement('div');
+            indicator.id = 'typing-indicator';
+            indicator.className = 'message-group';
+            indicator.innerHTML = `
+                <div class="message-bot">
+                    <div class="avatar avatar-bot">🤖</div>
+                    <div class="bot-content">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(indicator);
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) indicator.remove();
+        }
+
+        function scrollToBottom() {
+            const area = document.getElementById('messages-area');
+            requestAnimationFrame(() => {
+                area.scrollTop = area.scrollHeight;
+            });
+        }
+
+        // === 유틸리티 ===
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function renderMarkdown(text) {
+            if (!text) return '';
+            try {
+                return marked.parse(text);
+            } catch {
+                return escapeHtml(text).replace(/\n/g, '<br>');
+            }
+        }
+
+        function formatTime(isoString) {
+            if (!isoString) return '';
+            try {
+                const d = new Date(isoString);
+                return d.toLocaleString('ko-KR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
+            } catch {
+                return '';
+            }
+        }
     </script>
 </body>
 </html>
