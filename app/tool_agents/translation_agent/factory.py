@@ -19,6 +19,7 @@ class TranslationFactory(BaseToolFactory):
     complexity = "medium"
     summary = "비즈니스 문서를 한↔영 번역하며 전문 용어 일관성과 비즈니스 톤을 유지합니다"
     tags = ("translation", "korean", "english")
+    deprecated = True
 
     def create_tool(self, tool_config: dict[str, Any]) -> TranslationTool:
         return TranslationTool(

@@ -19,6 +19,7 @@ class IndexAdvisorFactory(BaseToolFactory):
     summary = "쿼리를 분석하여 인덱스 후보와 CREATE INDEX DDL을 추천합니다."
     tags = ("index", "performance", "tuning", "advisor", "dba")
     requires = ("postgresql",)  # EXPLAIN 보강에만 사용, 없어도 휴리스틱 동작
+    deprecated = True
 
     def __init__(self, db_provider: DBProvider | None = None) -> None:
         self._db_provider = db_provider or default_db_provider

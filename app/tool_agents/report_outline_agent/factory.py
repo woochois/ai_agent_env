@@ -19,6 +19,7 @@ class ReportOutlineFactory(BaseToolFactory):
     complexity = "simple"
     summary = "주제와 목적을 입력하면 보고서 목차와 섹션별 요점을 제안합니다"
     tags = ("report", "outline", "writing")
+    deprecated = True
 
     def create_tool(self, tool_config: dict[str, Any]) -> ReportOutlineTool:
         return ReportOutlineTool(

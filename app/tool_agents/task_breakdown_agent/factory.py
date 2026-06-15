@@ -19,6 +19,7 @@ class TaskBreakdownFactory(BaseToolFactory):
     complexity = "medium"
     summary = "프로젝트를 WBS로 분해하여 태스크 목록, 의존관계, 소요시간을 추정합니다"
     tags = ("project", "wbs", "planning")
+    deprecated = True
 
     def create_tool(self, tool_config: dict[str, Any]) -> TaskBreakdownTool:
         return TaskBreakdownTool(

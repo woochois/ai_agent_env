@@ -19,6 +19,7 @@ class EmailDraftFactory(BaseToolFactory):
     complexity = "simple"
     summary = "목적, 수신자, 핵심내용을 입력하면 비즈니스 이메일 초안을 생성합니다"
     tags = ("email", "draft", "writing")
+    deprecated = True
 
     def create_tool(self, tool_config: dict[str, Any]) -> EmailDraftTool:
         return EmailDraftTool(

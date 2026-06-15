@@ -18,6 +18,7 @@ class SlowQueryAnalyzerFactory(BaseToolFactory):
     agent_type = AGENT_TYPE
     display_name = "Slow Query Analyzer"
     category = "Performance"
+    deprecated = True
     complexity = "advanced"
     summary = "pg_stat_statements로 평균 실행시간이 높은 쿼리를 분석합니다."
     tags = ("performance", "monitoring", "pg_stat_statements", "dba")

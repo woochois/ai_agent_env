@@ -44,6 +44,9 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
     DEBUG_MODE: bool = False
 
+    # 세션 상태 관리
+    SESSION_TTL_HOURS: int = 24
+
     @model_validator(mode="after")
     def validate_required_and_log_level(self) -> "Settings":
         """필수 환경 변수와 LOG_LEVEL 유효성을 검증합니다.

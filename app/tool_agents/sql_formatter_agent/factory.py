@@ -14,6 +14,7 @@ class SqlFormatterFactory(BaseToolFactory):
     agent_type = AGENT_TYPE
     display_name = "SQL Formatter"
     category = "SQL"
+    deprecated = True
     complexity = "simple"
     summary = "SQL 쿼리를 읽기 좋게 정렬/포맷합니다 (키워드 대문자화, 절 줄바꿈)."
     tags = ("sql", "format", "lint", "style")

@@ -14,6 +14,7 @@ class SqlLintFactory(BaseToolFactory):
     agent_type = AGENT_TYPE
     display_name = "SQL Linter"
     category = "SQL"
+    deprecated = True
     complexity = "simple"
     summary = "SQL 안티패턴(SELECT *, WHERE 없는 DELETE, 선행 와일드카드 등)을 검출합니다."
     tags = ("sql", "lint", "best-practice", "review")

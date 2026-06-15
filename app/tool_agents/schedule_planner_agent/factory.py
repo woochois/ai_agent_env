@@ -19,6 +19,7 @@ class SchedulePlannerFactory(BaseToolFactory):
     complexity = "medium"
     summary = "업무 목록과 마감일을 입력하면 우선순위와 일별 일정 제안을 생성합니다"
     tags = ("schedule", "planning", "priority")
+    deprecated = True
 
     def create_tool(self, tool_config: dict[str, Any]) -> SchedulePlannerTool:
         return SchedulePlannerTool(

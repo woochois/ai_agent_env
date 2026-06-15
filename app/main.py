@@ -258,6 +258,15 @@ def _register_routes(app: FastAPI) -> None:
     except ImportError as exc:
         logger.info("Supervisor router not available: %s", exc)
 
+    # Pipeline 라우터 등록
+    try:
+        from app.agents.pipeline_router import router as pipeline_router
+
+        app.include_router(pipeline_router, prefix="/agent")
+        logger.info("Pipeline router registered")
+    except ImportError as exc:
+        logger.info("Pipeline router not available: %s", exc)
+
     # AI Ops 라우터 등록
     try:
         from app.agents.ops_router import router as ops_router

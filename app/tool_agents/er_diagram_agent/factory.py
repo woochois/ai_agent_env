@@ -19,6 +19,7 @@ class ERDiagramFactory(BaseToolFactory):
     summary = "스키마의 테이블/FK 관계로부터 Mermaid ER 다이어그램을 생성합니다."
     tags = ("erd", "schema", "mermaid", "modeling", "dm")
     requires = ("postgresql",)
+    deprecated = True
 
     def __init__(self, db_provider: DBProvider | None = None) -> None:
         self._db_provider = db_provider or default_db_provider

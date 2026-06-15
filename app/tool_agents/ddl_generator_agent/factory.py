@@ -18,6 +18,7 @@ class DDLGeneratorFactory(BaseToolFactory):
     summary = "컬럼 명세로부터 CREATE TABLE / 인덱스 DDL을 생성합니다."
     tags = ("ddl", "schema", "create-table", "modeling")
     requires = ()
+    deprecated = True
 
     def create_tool(self, tool_config: dict[str, Any]) -> DDLGeneratorTool:
         return DDLGeneratorTool(

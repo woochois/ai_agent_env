@@ -19,6 +19,7 @@ class MeetingSummaryFactory(BaseToolFactory):
     complexity = "simple"
     summary = "회의 내용을 입력하면 참석자, 안건, 결정사항, 액션아이템으로 구조화된 요약을 생성합니다"
     tags = ("meeting", "summary", "minutes")
+    deprecated = True
 
     def create_tool(self, tool_config: dict[str, Any]) -> MeetingSummaryTool:
         return MeetingSummaryTool(

@@ -19,6 +19,7 @@ class PresentationHelperFactory(BaseToolFactory):
     complexity = "medium"
     summary = "발표 자료의 슬라이드 구성과 각 슬라이드별 스크립트를 생성합니다"
     tags = ("presentation", "slides", "script")
+    deprecated = True
 
     def create_tool(self, tool_config: dict[str, Any]) -> PresentationHelperTool:
         return PresentationHelperTool(

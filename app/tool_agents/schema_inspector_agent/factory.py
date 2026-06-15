@@ -19,6 +19,7 @@ class SchemaInspectorFactory(BaseToolFactory):
     summary = "테이블의 컬럼/인덱스/제약조건을 조회합니다."
     tags = ("schema", "metadata", "introspection", "dba")
     requires = ("postgresql",)
+    deprecated = True
 
     def __init__(self, db_provider: DBProvider | None = None) -> None:
         self._db_provider = db_provider or default_db_provider

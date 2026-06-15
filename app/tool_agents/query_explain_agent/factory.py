@@ -15,6 +15,7 @@ class QueryExplainFactory(BaseToolFactory):
     agent_type = AGENT_TYPE
     display_name = "Query Explain"
     category = "Performance"
+    deprecated = True
     complexity = "medium"
     summary = "쿼리 실행계획(EXPLAIN)을 분석하여 비용/스캔 방식/경고를 제공합니다."
     tags = ("explain", "performance", "query-plan", "tuning")

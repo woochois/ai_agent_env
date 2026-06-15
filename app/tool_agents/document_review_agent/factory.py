@@ -19,6 +19,7 @@ class DocumentReviewFactory(BaseToolFactory):
     complexity = "medium"
     summary = "작성한 문서의 문법, 일관성, 논리적 흐름을 검토하고 개선 제안을 제공합니다"
     tags = ("review", "grammar", "quality")
+    deprecated = True
 
     def create_tool(self, tool_config: dict[str, Any]) -> DocumentReviewTool:
         return DocumentReviewTool(
