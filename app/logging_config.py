@@ -51,14 +51,21 @@ def _get_log_level() -> str:
 def _create_json_formatter() -> JsonFormatter:
     """JSON 포맷터를 생성합니다.
 
-    로그 항목에 timestamp, level, message 기본 필드를 포함합니다.
+    로그 항목에 timestamp, level, logger, message 기본 필드를 포함합니다
+    (Requirement 9.3).
 
     Returns:
         JsonFormatter: 설정된 JSON 포맷터 인스턴스
     """
     formatter = JsonFormatter(
-        fmt="%(asctime)s %(levelname)s %(message)s",
-        rename_fields={"asctime": "timestamp", "levelname": "level"},
+        # Include the logger name so each entry carries timestamp, level,
+        # message and logger fields (Requirement 9.3) for k9s log viewing.
+        fmt="%(asctime)s %(levelname)s %(name)s %(message)s",
+        rename_fields={
+            "asctime": "timestamp",
+            "levelname": "level",
+            "name": "logger",
+        },
         datefmt="%Y-%m-%dT%H:%M:%S",
     )
     return formatter

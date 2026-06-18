@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: ai-agent-ops
+  labels:
+    app: ai-agent-ops
+    component: database
+    version: v1.0.0
+spec:
+  type: ClusterIP
+  selector:
+    app: ai-agent-ops
+    component: database
+  ports:
+    - name: postgres
+      protocol: TCP
+      port: 5432
+      targetPort: 5432

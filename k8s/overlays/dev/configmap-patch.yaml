@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-agent-config
+  namespace: ai-agent-ops
+data:
+  # Verbose logging and debug enabled for development
+  DEBUG_MODE: "true"
+  LOG_LEVEL: "DEBUG"

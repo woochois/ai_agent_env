@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-agent-config
+  namespace: ai-agent-ops
+data:
+  # Quieter logging for production
+  LOG_LEVEL: "WARNING"

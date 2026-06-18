@@ -131,6 +131,10 @@ def create_app() -> FastAPI:
             str(exc),
             extra={
                 "request_id": request_id,
+                # error_type and trace_id support k9s log viewer problem
+                # tracing on error entries (Requirement 9.5).
+                "error_type": type(exc).__name__,
+                "trace_id": request_id,
                 "exception_type": type(exc).__name__,
                 "path": str(request.url.path),
             },

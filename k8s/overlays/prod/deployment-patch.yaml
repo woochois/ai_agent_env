@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-agent-app
+  namespace: ai-agent-ops
+spec:
+  # Production runs 3 replicas for higher availability
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: ai-agent-app
+          # Larger resource allocation for production workloads
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 2000m
+              memory: 1Gi

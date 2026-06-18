@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: ai-agent-ops
+  labels:
+    app: ai-agent-ops
+    component: database
+    version: v1.0.0
+spec:
+  serviceName: postgres
+  replicas: 1
+  # Retain the backing PVC when the StatefulSet is deleted or scaled down so
+  # data survives Pod/StatefulSet lifecycle events (Requirement 5.5).
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
+  selector:
+    matchLabels:
+      app: ai-agent-ops
+      component: database
+  template:
+    metadata:
+      labels:
+        app: ai-agent-ops
+        component: database
+        version: v1.0.0
+      annotations:
+        deploy-timestamp: "2024-01-15T09:30:00Z"
+        app-version: v1.0.0
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: postgres-secrets
+          env:
+            # Store data in a subdirectory so the mounted volume root
+            # (which may contain lost+found) does not block initdb.
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+        labels:
+          app: ai-agent-ops
+          component: database
+          version: v1.0.0
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        # NOTE: reclaimPolicy: Retain (Requirement 5.5) is a StorageClass /
+        # PersistentVolume level setting, not a PVC field. Use a StorageClass
+        # configured with `reclaimPolicy: Retain` in the target cluster, e.g.:
+        #   storageClassName: retain-standard
+        # The persistentVolumeClaimRetentionPolicy above complements this by
+        # keeping the PVC across StatefulSet lifecycle events.

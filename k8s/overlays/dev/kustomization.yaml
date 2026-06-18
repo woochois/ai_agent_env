@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Development environment overlay for the ai-agent-ops platform.
+# References the shared base and applies dev-specific patches:
+#   - Deployment: 2 replicas with a smaller resource footprint
+#   - Service: LoadBalancer for local (Docker Desktop) external access
+#   - ConfigMap: DEBUG_MODE=true, LOG_LEVEL=DEBUG
+namespace: ai-agent-ops
+
+resources:
+  - ../../base
+
+patches:
+  - path: deployment-patch.yaml
+    target:
+      kind: Deployment
+      name: ai-agent-app
+  - path: service-patch.yaml
+    target:
+      kind: Service
+      name: ai-agent-app
+  - path: configmap-patch.yaml
+    target:
+      kind: ConfigMap
+      name: ai-agent-config

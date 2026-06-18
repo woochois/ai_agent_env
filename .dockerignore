@@ -1,0 +1,20 @@
+# Python virtual environment
+.venv
+
+# Git metadata
+.git
+
+# Python bytecode cache
+__pycache__
+
+# Environment variables / secrets
+.env
+
+# Property-based testing cache
+.hypothesis
+
+# Pytest cache
+.pytest_cache
+
+# Kubernetes manifests (not needed in build context)
+k8s/
